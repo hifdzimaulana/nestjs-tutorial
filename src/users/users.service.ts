@@ -27,8 +27,10 @@ export class UsersService {
   update(id: number, updateUserDto: UpdateUserDto): User {
     const index = this.users.findIndex((user) => user.id === id);
     let user = this.users[index];
-    user = { ...user, ...updateUserDto };
-    this.users[index] = user;
+    if (user) {
+      user = { ...user, ...updateUserDto };
+      this.users[index] = user;
+    }
     return user;
   }
 

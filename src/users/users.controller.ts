@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,6 +15,7 @@ import {
   ApiAcceptedResponse,
   ApiCreatedResponse,
   ApiGoneResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -37,15 +39,25 @@ export class UsersController {
   }
 
   @ApiOkResponse({ type: User })
+  @ApiNotFoundResponse()
   @Get(':id')
   findOne(@Param('id') id: string): User {
-    return this.usersService.findOne(+id);
+    const user = this.usersService.findOne(+id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   @ApiAcceptedResponse({ type: User })
+  @ApiNotFoundResponse()
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): User {
+    const user = this.usersService.update(+id, updateUserDto);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   @ApiOkResponse()
