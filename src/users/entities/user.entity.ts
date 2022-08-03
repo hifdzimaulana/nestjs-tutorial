@@ -7,11 +7,8 @@ export class User {
   @ApiProperty()
   name: string;
 
-  @ApiProperty({
-    required: false,
-    oneOf: [{ type: 'number' }, { type: 'string' }],
-  })
-  phone?: string | number;
+  @ApiProperty({ required: false })
+  phone?: string;
 
   @ApiProperty({ required: false })
   address?: string;

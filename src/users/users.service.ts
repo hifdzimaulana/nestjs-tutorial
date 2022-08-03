@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 export class UsersService {
   private users: User[] = [
     { id: 1, name: 'Muller', address: 'Munich' },
-    { id: 2, name: 'Kevin', address: 'Manchester', phone: 85664 },
+    { id: 2, name: 'Kevin', address: 'Manchester', phone: '85664' },
   ];
 
   create(createUserDto: CreateUserDto): User {

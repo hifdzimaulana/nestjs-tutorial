@@ -7,14 +7,15 @@ import {
   Param,
   Delete,
   NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiAcceptedResponse,
+  ApiBadRequestResponse,
   ApiCreatedResponse,
-  ApiGoneResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
@@ -27,6 +28,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiCreatedResponse({ type: User })
+  @ApiBadRequestResponse()
   @Post()
   create(@Body() createUserDto: CreateUserDto): User {
     return this.usersService.create(createUserDto);
@@ -41,7 +43,7 @@ export class UsersController {
   @ApiOkResponse({ type: User })
   @ApiNotFoundResponse()
   @Get(':id')
-  findOne(@Param('id') id: string): User {
+  findOne(@Param('id', ParseIntPipe) id: number): User {
     const user = this.usersService.findOne(+id);
     if (!user) {
       throw new NotFoundException();
@@ -52,7 +54,10 @@ export class UsersController {
   @ApiAcceptedResponse({ type: User })
   @ApiNotFoundResponse()
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): User {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): User {
     const user = this.usersService.update(+id, updateUserDto);
     if (!user) {
       throw new NotFoundException();
@@ -62,7 +67,7 @@ export class UsersController {
 
   @ApiOkResponse()
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(+id);
   }
 }
