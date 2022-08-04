@@ -9,6 +9,7 @@ import {
   NotFoundException,
   ParseIntPipe,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,12 +18,15 @@ import {
   ApiAcceptedResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { NotFoundFilter } from './filters/not-found.filter';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('users')
 @UseFilters(new NotFoundFilter())
@@ -72,5 +76,15 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(+id);
+  }
+
+  @ApiCreatedResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(AuthGuard)
+  @Post('login')
+  login(@Body() loginDto: LoginDto): object {
+    return {
+      accessToken: 'asdjkfasdfasdf.asdf0w9034t09qiafla.9q3rf',
+    };
   }
 }
