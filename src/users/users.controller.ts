@@ -22,6 +22,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { NotFoundFilter } from './filters/not-found.filter';
@@ -79,7 +80,7 @@ export class UsersController {
   }
 
   @ApiCreatedResponse()
-  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
   @UseGuards(AuthGuard)
   @Post('login')
   login(@Body() loginDto: LoginDto): object {

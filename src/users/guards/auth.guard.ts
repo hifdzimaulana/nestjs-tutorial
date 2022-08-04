@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
@@ -11,6 +16,6 @@ export class AuthGuard implements CanActivate {
     const { username, password } = request.body;
 
     if (username === 'superadmin' && password === 'superadmin') return true;
-    return false;
+    throw new UnauthorizedException();
   }
 }
