@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   ParseIntPipe,
+  UseFilters,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,8 +22,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { NotFoundFilter } from './filters/not-found.filter';
 
 @ApiTags('users')
+@UseFilters(new NotFoundFilter())
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
