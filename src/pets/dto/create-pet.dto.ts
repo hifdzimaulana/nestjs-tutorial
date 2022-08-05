@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsInt, IsString } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsString } from 'class-validator';
+import { ANIMAL } from '../entities/pet.entity';
 
 export class CreatePetDto {
   @ApiProperty()
-  @IsIn(['dog', 'fish', 'cat'])
-  type: 'dog' | 'fish' | 'cat';
+  @IsEnum(ANIMAL)
+  type: ANIMAL;
 
   @ApiProperty()
   @IsString()

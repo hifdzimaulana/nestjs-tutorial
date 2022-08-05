@@ -8,15 +8,21 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export enum ANIMAL {
+  DOG = 'dog',
+  FISH = 'fish',
+  CAT = 'cat',
+}
+
 @Entity()
 export class Pet {
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
   id: string;
 
-  @Column({ type: 'enum', enum: ['dog', 'fish', 'cat'] })
+  @Column({ type: 'enum', enum: ANIMAL })
   @ApiProperty()
-  type: 'dog' | 'fish' | 'cat';
+  type: ANIMAL;
 
   @Column()
   @ApiProperty()
