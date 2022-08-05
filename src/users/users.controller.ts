@@ -18,6 +18,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiNotImplementedResponse,
   ApiOkResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -57,6 +58,7 @@ export class UsersController {
 
   @ApiOkResponse()
   @ApiNotFoundResponse()
+  @ApiNotImplementedResponse()
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
