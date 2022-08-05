@@ -23,12 +23,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { NotFoundFilter } from './filters/not-found.filter';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginDto } from './dto/login.dto';
 
 @ApiTags('users')
-@UseFilters(new NotFoundFilter())
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
