@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Pet } from 'src/pets/entities/pet.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -18,4 +19,7 @@ export class User {
   @Column({ nullable: true })
   @ApiProperty({ required: false })
   address?: string;
+
+  @OneToMany((type) => Pet, (pet) => pet.user, { onDelete: 'CASCADE' })
+  pets: Pet[];
 }
