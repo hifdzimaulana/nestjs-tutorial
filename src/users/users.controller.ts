@@ -15,10 +15,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
-  ApiAcceptedResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
-  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
@@ -38,35 +36,21 @@ export class UsersController {
   @ApiCreatedResponse({ type: User })
   @ApiBadRequestResponse()
   @Post()
-  create(@Body() createUserDto: CreateUserDto): User {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
   }
 
   @ApiOkResponse({ type: User, isArray: true })
   @Get()
-  findAll(): User[] {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @ApiOkResponse({ type: User })
   @ApiNotFoundResponse()
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): User {
-    const user = this.usersService.findOne(+id);
-    if (!user) {
-      throw new NotFoundException();
-    }
-    return user;
-  }
-
-  @ApiAcceptedResponse({ type: User })
-  @ApiNotFoundResponse()
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ): User {
-    const user = this.usersService.update(+id, updateUserDto);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.findOne(+id);
     if (!user) {
       throw new NotFoundException();
     }
@@ -74,9 +58,28 @@ export class UsersController {
   }
 
   @ApiOkResponse()
+  @ApiNotFoundResponse()
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const result = await this.usersService.update(+id, updateUserDto);
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    }
+    return result;
+  }
+
+  @ApiOkResponse()
+  @ApiNotFoundResponse()
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const result = await this.usersService.remove(+id);
+    if (result.affected == 0) {
+      throw new NotFoundException();
+    }
+    return result;
   }
 
   @ApiCreatedResponse()
